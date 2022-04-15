@@ -32,4 +32,18 @@ class OrderListCreateView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
 
 
+class CartUpdateView(generics.UpdateAPIView):
+    def get_queryset(self):
+        queryset = Cart.objects.filter(pk=self.kwargs['pk'])
+        return queryset
+    serializer_class = CartSerializer
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'status updated successfully'})
+        else:
+            return Response({'message': 'failed', 'details': serializer.errors})
