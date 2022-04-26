@@ -30,3 +30,18 @@ class CartProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ['id', 'series', 'number', 'orders']
+
+
+class CartGeneratorSerializer(serializers.ModelSerializer):
+    quantity = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Cart
+        fields = '__all__'
+
+
+class CartStatusSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    class Meta:
+        model = Cart
+        fields = ['id', 'status']
