@@ -10,6 +10,7 @@ from .serializers import *
 import datetime
 
 
+
 class CartListView(generics.ListAPIView):
     search_fields = ['series', 'number', 'created_at', 'expires_at', 'used_at', 'sum', 'status']
     filter_backends = (filters.SearchFilter,)
@@ -58,19 +59,20 @@ class GeneratorCartsView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         quantity = request.data.get('quantity')
-        expires_at = request.data.get('expires_at')
         series = request.data.get('series')
         number = request.data.get('number')
-        status_cart = request.data.get('status')
         sum = request.data.get('sum')
         used_at = request.data.get('used_at')
+        expires_at = request.data.get('expires_at')
+        status_cart = request.data.get('status')
+        
 
         for _ in range(int(quantity)):
-            cart = Cart.objects.create(expires_at=expires_at, series=series,
-                                       number=number, status=status_cart, sum=sum, used_at=used_at)
+            cart = Cart.objects.create(series=series,
+                                       number=number, status=status_cart, expires_at=expires_at, sum=sum, used_at=used_at)
             cart.save()
 
-        return Response('suka python govno', status=status.HTTP_201_CREATED)
+        return Response('generated carts', status=status.HTTP_201_CREATED)
 
 
 class ChangeStatusView(generics.UpdateAPIView):
